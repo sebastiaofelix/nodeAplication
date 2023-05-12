@@ -5,12 +5,17 @@ class UserController {
         const { name, email, password } = request.body
 
         const database = await sqliteConnection();
+        const checkUserExist = await database.get("SELECT * FROM user WHERE email = (?)", [email]);
 
+        if(checkUserExist){
+            throw new AppError("E-mail cadastrado");
+        }
+        
         await database.run(
             "INSERT INTO user (name, email, password) VALUES (?, ?, ?)",
             [name, email, password]);
 
-    return response.json();
+    return response.status(201).json();
             
     }
 }
