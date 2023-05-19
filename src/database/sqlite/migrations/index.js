@@ -1,15 +1,15 @@
-const { error } = require("console");
-const sqliteConnection = require("../../sqlite");
-const createUsers = require('../../../database/knex/migrations/20230511164432_createUsers');
+const { error } = require('console');
+const sqliteConnection = require('../../sqlite');
+const createUsers = require('./createUser');
 
 async function migrationsRun(){
-    const schemas = [
+     const schemas = [
         createUsers
-    ].join('');
+     ].join('');
 
-    sqliteConnection()
-    .then(db => db.exec(schemas))
-    .catch(error => console.log(error));
+     sqliteConnection()
+     .then(db => db.exec(schemas))
+     .catch(error => console.log(error));
 }
 
 module.exports = migrationsRun;

@@ -1,12 +1,11 @@
 const { Router } = require("express");
 
-const UserController = require("../controller/userController");
+const TagsController = require("../controller/movieTagsController");
 
-const userRoutes = Router();
+const tagsRoutes = Router();
 
-const userController = new UserController();
+const tagsController = new TagsController();
 
-userRoutes.post("/", userController.create);
+tagsRoutes.get("/:user_id", tagsController.index);
 
-
-module.exports = userRoutes;
+module.exports = tagsRoutes;
