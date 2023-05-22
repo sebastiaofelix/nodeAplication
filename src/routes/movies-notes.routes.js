@@ -1,14 +1,14 @@
 const { Router } = require("express");
 
-const NotesController = require("../controller/movieNotesController");
+const MovieNotesController = require("../controller/movieNotesController");
 
 const notesRoutes = Router();
 
-const notesController = new NotesController();
+const movieNotesController = new MovieNotesController();
 
-notesRoutes.get("/", notesController.index);
-notesRoutes.post("/:user_id", notesController.create);
-notesRoutes.get("/:id", notesController.show);
-notesRoutes.delete("/:id", notesController.delete);
+notesRoutes.get("/", movieNotesController.index);
+notesRoutes.post("/:user_id", movieNotesController.create);
+notesRoutes.get("/:id", movieNotesController.show);
+notesRoutes.delete("/:id", movieNotesController.delete);
 
 module.exports = notesRoutes;
