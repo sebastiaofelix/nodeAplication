@@ -2,26 +2,25 @@ const knex = require("../database/knex")
 
 class MovieNotesController{
     async create(request, response){
-        const { title, description, rating, movieTags } = request.body;
-        const { user_id } = request.params;
+        const { title, description, rating, tags } = request.body;
+        const user_id = request.user.id;
 
         const [movieNotes_id] = await knex("movieNotes").insert({
             title,
-            description,
             rating,
+            description,
             user_id
         });
 
-        const movieTagsInsert = movieTags.map( name => {
+        const movieTagsInsert = tags.map( name => {
             return {
                 movieNotes_id,
-                name,
-                user_id
+                user_id,
+                name
             }
         });
 
         await knex("movieTags").insert(movieTagsInsert);
-
         response.json();
     }
 
@@ -46,12 +45,13 @@ class MovieNotesController{
     }
 
     async index(request, response){
-        const { title, user_id, movieTags } = request.query;
+        const { title, tags } = request.query;
+        const user_id = request.user.id;
 
-        let movieNotes;
+        let notes;
 
-        if (movieTags){
-            const filterTags = movieTags.split(',').map(tag => tag.trim());
+        if (tags){
+            const filterTags = tags.split(',').map(tag => tag.trim());
 
             notes = await knex("movieTags")
             .select([
@@ -65,14 +65,14 @@ class MovieNotesController{
             .innerJoin("movieNotes", "movieNotes.id", "movieTags.movieNotes_id")
             .orderBy("movieNotes.title");
         } else {
-            movieNotes = await knex("movieNotes")
+            notes = await knex("movieNotes")
             .where({ user_id })
             .whereLike("title", `%${title}%`)
             .orderBy("title");
         }
 
         const userTags = await knex("movieTags").where({ user_id });
-        const notesWithTags = movieNotes.map(note => {
+        const notesWithTags = notes.map(note => {
             const noteTags = userTags.filter(tag => tag.movieNotes_id === note.id);
 
             return {

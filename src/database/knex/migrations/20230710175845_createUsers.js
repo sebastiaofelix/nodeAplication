@@ -3,7 +3,7 @@ exports.up = knex => knex.schema.createTable('users', table => {
   table.increments('id').primary();
   table.text('name');
   table.text('email');
-  table.text('text');
+  table.text('password');
   table.text('avatar')
 
   table.timestamp("created_at").default(knex.fn.now());
